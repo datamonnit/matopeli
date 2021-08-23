@@ -1,7 +1,13 @@
-const playercolor = "lightgreen"
+const playercolor = "green"
 const playerbordercolor = ""
 
 function Player(x, y) {
+    class PlayerParts {
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+        }
+    }
 
     this.x = x
     this.y = y
@@ -9,56 +15,44 @@ function Player(x, y) {
     this.height = 20
     this.playercolor = playercolor
     this.playerbordercolor = playerbordercolor
-    this.player_length = 1
+    this.snake_parts = []
+    this.playerLength = 3;
+    this.velocityX = 0;
+    this.velocityY = 0;
+    this.score = 0;
 
 
 
-    this.change_direction = function(event) {
-        const LEFT_KEY = 37 || "a";
-        const RIGHT_KEY = 39 || "d";
-        const UP_KEY = 38 || "w";
-        const DOWN_KEY = 40 || "s";
+    this.drawplayer = function() {
 
-        // estää pelaajaa peruuttamasta
-
-        if (changing_direction) return;
-        changing_direction = true;
-        const keyPressed = event.keyCode;
-        const goingUp = dy === -10;
-        const goingDown = dy === 10;
-        const goingRight = dx === 10;
-        const goingLeft = dx === -10;
-        if (keyPressed === LEFT_KEY && !goingRight) {
-            dx = -20;
-            dy = 0;
+        gameboard_ctx.fillStyle = 'blue'
+        gameboard_ctx.strokeStyle = 'white'
+        gameboard_ctx.strokeWidth = 1
+        for (let i = 0; i < this.snake_parts.length; i++) { //lisää uuden osan
+            let part = this.snake_parts[i]
+            gameboard_ctx.fillRect(part.x, part.y, 20, 20)
+            gameboard_ctx.strokeRect(part.x, part.y, 20, 20)
         }
-        if (keyPressed === UP_KEY && !goingDown) {
-            dx = 0;
-            dy = -20;
+        this.snake_parts.push(new PlayerParts(this.x, this.y))
+        if (this.snake_parts.length > this.playerLength) {
+            this.snake_parts.shift(); //poistaa vanhimman osan
         }
-        if (keyPressed === RIGHT_KEY && !goingLeft) {
-            dx = 20;
-            dy = 0;
-        }
-        if (keyPressed === DOWN_KEY && !goingUp) {
-            dx = 0;
-            dy = 20;
-        }
-    }
-
-    this.drawplayerPart = function(part) {
         //pelaajan väri
         gameboard_ctx.fillStyle = this.playercolor
-            //pelaajan reunuksen väri
-        gameboard_ctx.lineWidth = 2
-        gameboard_ctx.strokestyle = this.playerbordercolor
         gameboard_ctx.fillRect(this.x, this.y, this.width, this.height)
-        gameboard_ctx.strokeRect(this.x, this.y, this.width, this.height)
+        gameboard_ctx.strokeRect(this.x, this.y, 20, 20)
     }
-    this.drawPlayer = function() {
-        for (i = 0; i <= this.player_length; i++) {
-            this.drawplayerPart(i)
-        }
+    this.addpart = function() {
+        this.playerLength++
     }
 
+    this.drawPlayer = function() {
+
+        this.drawplayer()
+
+    }
+    this.moveSnake = function() {
+        this.x = this.x + this.velocityX
+        this.y = this.y + this.velocityY
+    }
 }
