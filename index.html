@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <title>MatoPeli</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="tyylit.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="ylapalkki"><h1>MatoPeli</h1></div>
+    <div id="tekijapalkki"><p>Tervetuloa pelaamaan MatoPeliä!</p></div>
+    <div id="pistepalkki"><p>Pisteet: <span id="pisteet">0</span></p></div>
+    <div id="loppupalkki"><p>PELI OHI!</p></div>
+    <div id="menu"><p>
+        Valitse vaikeustaso:
+            <br>
+            <br>
+            <span class="menuTekstit" onclick="aloitaPeli()">HELPPO</span>
+            <br>
+            <br>
+            <span class="menuTekstit" onclick="aloitaPeliKeski()">KESKITASO</span>
+            <br>
+            <br>
+            <span class="menuTekstit" onclick="aloitaPeliVaikea()">VAIKEA</span>
+        </p></div>
+    <div id="peliOhi"><p>
+        Omenat: x<span id="omenat">0</span>
+        <br>
+        <br>
+        Vaikeustasokerroin: x<span id="kerroin">0</span>
+        <br>
+        <br>
+        Pisteet yhteensä: <span id="pisteetLoppu">0</span>
+        <br>
+        <br>
+        <br>
+        <span class="menuTekstit" onclick="pelaaUudelleen()">PELAA UUDELLEEN</span>
+    </p></div>    
+    <canvas id="kanvaasi" width="400px" height="400px"></canvas>
+    <div class="pohjateksti"><p>Tekijä: Samuli Koppi TiVi20C</p></div>
+ 
+<script src="matopeli.js"></script>
+</body>
+ 
+</html>
