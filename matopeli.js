@@ -30,19 +30,27 @@
  {
      switch (event.keyCode)
      {
-         case 38:    
+         case 38: 
+         if (matoLiikkuminen.y == matoAskel)
+             return
              matoLiikkuminen.x = 0;
              matoLiikkuminen.y = -matoAskel;
              break;
-         case 37:    
+         case 37:
+            if (matoLiikkuminen.x == matoAskel)
+            return    
              matoLiikkuminen.x = -matoAskel;
              matoLiikkuminen.y = 0;
              break;
-         case 39:       
+         case 39:  
+         if (matoLiikkuminen.x == -matoAskel)
+             return     
              matoLiikkuminen.x = matoAskel;
              matoLiikkuminen.y = 0;
              break;
-         case 40:    
+         case 40:
+            if (matoLiikkuminen.y == -matoAskel)
+            return    
              matoLiikkuminen.x = 0;
              matoLiikkuminen.y = matoAskel;
              break;
