@@ -29,7 +29,7 @@ p {
     border: 10px solid black;
 }
 #menu {
-    padding-top:60px;
+    padding-top:50px;
     background-color: blanchedalmond;
     position: absolute;
     top:250px;
@@ -42,7 +42,7 @@ p {
     text-align: center;
 }
 #peliOhi {
-    padding-top:90px;
+    padding-top:50px;
     display: none;
     position: absolute;
     top:250px;
@@ -99,11 +99,13 @@ p {
     top:190px;
     left: 50%;
     width:400px;
+    min-height: 68px;
     transform: translate(-50%, 0%);
     border: 10px solid black;
     line-height: 0px;
     text-align: center;
 }
+
 .pohjateksti {
     padding:0;
     margin:0;

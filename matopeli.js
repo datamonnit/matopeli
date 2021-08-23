@@ -5,6 +5,8 @@
  var matoAskel = 20;
  var ruoka = { x: 0, y: 0 };
  var pisteet = 0;
+ var huippupisteet = 0;
+
 
 
  kanvaasi = document.getElementById("kanvaasi");
@@ -58,7 +60,12 @@
  };
 
 function aloitaPeli() {
+    if (sessionStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= sessionStorage.getItem("pisteet");
+    }
     pistekerroin = 1;
+    matoLiikkuminen = { x: 20, y: 0 };
+    document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
     document.getElementById("tekijapalkki").style.display ="none"; 
     document.getElementById("pistepalkki").style.display ="inline";  
@@ -66,29 +73,41 @@ function aloitaPeli() {
 }
 
 function aloitaPeliKeski() {
+    if (sessionStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= sessionStorage.getItem("pisteet");
+    }
     pistekerroin = 1.5;
+    matoLiikkuminen = { x: 20, y: 0 };
+    document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
-    document.getElementById("pistepalkki").style.display ="inline";        
-    setInterval(peliLoop, 90);
+   document.getElementById("tekijapalkki").style.display ="none"; 
+   document.getElementById("pistepalkki").style.display ="inline";  
+   setInterval(peliLoop, 100);
 }
 
 function aloitaPeliVaikea() {
+    if (sessionStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= sessionStorage.getItem("pisteet");
+    }
     pistekerroin = 2;
+    matoLiikkuminen = { x: 20, y: 0 };
+    document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
-    document.getElementById("pistepalkki").style.display ="inline";     
-    setInterval(peliLoop, 40);
+   document.getElementById("tekijapalkki").style.display ="none"; 
+   document.getElementById("pistepalkki").style.display ="inline";  
+   setInterval(peliLoop, 50);
 }
 
  function peliLoop()
  {
     if (loppuiko_peli()) {
         peliOhi();
-        return;
+        
     } 
      update();
      draw();
  }
-
+ 
  function update()
  {
     
@@ -104,6 +123,7 @@ function aloitaPeliVaikea() {
      if (matoLista[0].x === ruoka.x &&
          matoLista[0].y === ruoka.y)
      { 
+        
          matoLista.push({ x: ruoka.x, y: ruoka.y });
          pisteet= pisteet+1;
          document.getElementById("pisteet").innerHTML=Math.round(pisteet*pistekerroin);
@@ -127,12 +147,18 @@ function aloitaPeliVaikea() {
   }
 
   function peliOhi() {
-     document.getElementById("pistepalkki").style.display ="none";
-     document.getElementById("loppupalkki").style.display ="inline";
-     document.getElementById("omenat").innerHTML=pisteet;
-     document.getElementById("kerroin").innerHTML=pistekerroin;
-     document.getElementById("pisteetLoppu").innerHTML=Math.round(pisteet*pistekerroin);
-     document.getElementById("peliOhi").style.display ="block";
+    if (Math.round(pisteet*pistekerroin)> huippupisteet){
+    huippupisteet=Math.round(pisteet*pistekerroin);
+    sessionStorage.setItem("pisteet", huippupisteet);
+    document.getElementById("peliloppui").innerText="TEIT UUDEN ENNÄTYKSEN!";
+    }
+    document.getElementById("ennatys").innerHTML=huippupisteet;
+    document.getElementById("pistepalkki").style.display ="none";
+    document.getElementById("loppupalkki").style.display ="inline";
+    document.getElementById("omenat").innerHTML=pisteet;
+    document.getElementById("kerroin").innerHTML=pistekerroin;
+    document.getElementById("pisteetLoppu").innerHTML=Math.round(pisteet*pistekerroin);
+    document.getElementById("peliOhi").style.display ="block";
   }
 
   function pelaaUudelleen() {
