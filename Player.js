@@ -32,6 +32,7 @@ function Player(x, y) {
             let part = this.snake_parts[i]
             gameboard_ctx.fillRect(part.x, part.y, 20, 20)
             gameboard_ctx.strokeRect(part.x, part.y, 20, 20)
+           
         }
         this.snake_parts.push(new PlayerParts(this.x, this.y))
         if (this.snake_parts.length > this.playerLength) {

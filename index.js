@@ -7,9 +7,10 @@ var applewidth = 20;
 var appleheight = 20;
 var appleX;
 var appleY;
-var tilecount = 40
-var gamespeed = 5
+var tilecount = 30
+var gamespeed = 10
 var overallscore = 0;
+var directionchanged;
 window.onload = function() {
     gameboard = document.getElementById('game_canvas')
     gameboard_ctx = gameboard.getContext("2d")
@@ -17,7 +18,7 @@ window.onload = function() {
     //aloittaa gameloopin
     gameLoop = setInterval(step, 1000 / gamespeed)
         //luo pelaajan
-    player = new Player(400, 400)
+    player = new Player(tilecount * 10, tilecount * 10)
         //luodaan ensimmäisen omenan koordinaatit
     appleX = Math.floor(Math.random() * tilecount) * 20
     appleY = Math.floor(Math.random() * tilecount) * 20
@@ -37,6 +38,7 @@ function clearCanvas() {
 
 
 function step() {
+    directionchanged = false
     clearCanvas();
     player.moveSnake();
     isGameOver();
@@ -68,7 +70,7 @@ function checkAppleCollision() {
             if (player.score === 1) {
                 clearInterval(gameLoop)
                 gameLoop = setInterval(step, 1000 / gamespeed)
-                gamespeed = gamespeed + 0.5
+                gamespeed = gamespeed + 0.1
                 player.score = 0
             }
         console.log(gamespeed)
@@ -86,11 +88,11 @@ function isGameOver() {
     //onko pelaaja osunut seinään
     if (player.x < 0) {
         gameOver = true
-    } else if (player.x === 800) {
+    } else if (player.x === gameboard.width) {
         gameOver = true
     } else if (player.y < 0) {
         gameOver = true
-    } else if (player.y === 800) {
+    } else if (player.y === gameboard.height) {
         gameOver = true
     }
     for (let i = 0; i < player.snake_parts.length; i++) {
@@ -112,36 +114,45 @@ function isGameOver() {
 document.body.addEventListener('keydown', change_direction);
 
 function change_direction(event) {
-    // estää pelaajaa peruuttamasta
+    //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
+    if (directionchanged == false) {
+        // estää pelaajaa peruuttamasta
 
 
-    if (event.which == 37 || event.which == 65) {
-        if (player.velocityX == 20)
-            return
-        player.velocityX = -20;
-        player.velocityY = 0;
+        if (event.which == 37 || event.which == 65) {
+            if (player.velocityX == 20)
+                return
+            player.velocityX = -20;
+            player.velocityY = 0;
+            directionchanged = true
 
-    }
-    if (event.which == 39 || event.which == 68) {
-        if (player.velocityX == -20)
-            return
-        player.velocityX = 20;
-        player.velocityY = 0;
+        }
+        if (event.which == 39 || event.which == 68) {
+            if (player.velocityX == -20)
+                return
+            player.velocityX = 20;
+            player.velocityY = 0;
+            directionchanged = true
 
-    }
-    if (event.which == 38 || event.which == 87) {
-        if (player.velocityY == 20)
-            return
-        player.velocityX = 0;
-        player.velocityY = -20;
+        }
+        if (event.which == 38 || event.which == 87) {
+            if (player.velocityY == 20)
+                return
+            player.velocityX = 0;
+            player.velocityY = -20;
+            directionchanged = true
 
-    }
+        }
 
-    if (event.which == 40 || event.which == 83) {
-        if (player.velocityY == -20)
-            return
-        player.velocityX = 0;
-        player.velocityY = 20;
+        if (event.which == 40 || event.which == 83) {
+            if (player.velocityY == -20)
+                return
+            player.velocityX = 0;
+            player.velocityY = 20;
+            directionchanged = true
 
+        }
+    } else {
+        return
     }
 }

@@ -1,10 +1,36 @@
+@font-face {
+  font-family: pixelfont;
+  src: url(font/pixelfont.ttf);
+}
 body {
-  background-color: lightblue;
+  background-color: darkblue;
+  font-family: pixelfont;
 }
 canvas {
-  position: absolute;
+  margin-top: 10px;
+  position: fixed;
   top: 50%;
   left: 50%;
-
+  border: 5px solid whitesmoke;
+  border-radius: 9px;
   transform: translate(-50%, -50%);
+}
+h1 {
+  color: yellow;
+  padding-top: 50px;
+  text-align: center;
+  margin: 0px;
+  font-size: 3rem;
+  text-shadow: 4px 2px #ff0000, 4px 2px #ff0000;
+}
+.header {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: 5px;
+  left: 50%;
+  width: 400px;
+  transform: translate(-50%, 0%);
+  line-height: 0px;
+  text-align: center;
 }
