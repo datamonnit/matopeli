@@ -7,6 +7,9 @@
  var pisteet = 0;
  var huippupisteet = 0;
 
+ var omppuSfx;
+ var ennatySfx;
+ 
 
 
  kanvaasi = document.getElementById("kanvaasi");
@@ -23,6 +26,7 @@
  
  var mato = new Image();
  mato.src = 'kuvat/mato.png';
+
 
 
  luoRuoka();
@@ -59,6 +63,11 @@
      }
  };
 
+function aloitus(){
+    var musat = document.getElementById("musiikki");
+        musat.play();
+    document.getElementById("alku").style.display="none";
+}
 function aloitaPeli() {
     if (sessionStorage.getItem("pisteet")>huippupisteet) {
         huippupisteet= sessionStorage.getItem("pisteet");
@@ -68,7 +77,8 @@ function aloitaPeli() {
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
     document.getElementById("tekijapalkki").style.display ="none"; 
-    document.getElementById("pistepalkki").style.display ="inline";  
+    document.getElementById("pistepalkki").style.display ="inline";
+    document.getElementById("musiikki").src = "sfx/helppo.mp3";    
     setInterval(peliLoop, 200);
 }
 
@@ -81,7 +91,8 @@ function aloitaPeliKeski() {
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
    document.getElementById("tekijapalkki").style.display ="none"; 
-   document.getElementById("pistepalkki").style.display ="inline";  
+   document.getElementById("pistepalkki").style.display ="inline";
+   document.getElementById("musiikki").src = "sfx/keskivaikea.mp3";  
    setInterval(peliLoop, 100);
 }
 
@@ -94,16 +105,19 @@ function aloitaPeliVaikea() {
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
    document.getElementById("tekijapalkki").style.display ="none"; 
-   document.getElementById("pistepalkki").style.display ="inline";  
+   document.getElementById("pistepalkki").style.display ="inline";
+   document.getElementById("musiikki").src = "sfx/vaikea.mp3";  
    setInterval(peliLoop, 50);
 }
 
  function peliLoop()
  {
     if (loppuiko_peli()) {
-        peliOhi();
-        
+        document.getElementById("musiikki").src = "";  
+        peliOhi();  
     } 
+    omenaSfx = new sound("sfx/omppu.ogg");
+    ennatysSfx = new sound("sfx/voitto.mp3");
      update();
      draw();
  }
@@ -123,7 +137,7 @@ function aloitaPeliVaikea() {
      if (matoLista[0].x === ruoka.x &&
          matoLista[0].y === ruoka.y)
      { 
-        
+         omenaSfx.play();
          matoLista.push({ x: ruoka.x, y: ruoka.y });
          pisteet= pisteet+1;
          document.getElementById("pisteet").innerHTML=Math.round(pisteet*pistekerroin);
@@ -146,12 +160,13 @@ function aloitaPeliVaikea() {
     return osuiVasenSeina || osuiOikeaSeina || osuiYlaSeina || osuiAlaSeina
   }
 
-  function peliOhi() {
+  function peliOhi() {  
     if (Math.round(pisteet*pistekerroin)> huippupisteet){
+    ennatysSfx.play();
     huippupisteet=Math.round(pisteet*pistekerroin);
     sessionStorage.setItem("pisteet", huippupisteet);
     document.getElementById("peliloppui").innerText="TEIT UUDEN ENNÄTYKSEN!";
-    }
+    }  
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("pistepalkki").style.display ="none";
     document.getElementById("loppupalkki").style.display ="inline";
@@ -159,6 +174,7 @@ function aloitaPeliVaikea() {
     document.getElementById("kerroin").innerHTML=pistekerroin;
     document.getElementById("pisteetLoppu").innerHTML=Math.round(pisteet*pistekerroin);
     document.getElementById("peliOhi").style.display ="block";
+    return 
   }
 
   function pelaaUudelleen() {
@@ -186,22 +202,19 @@ function aloitaPeliVaikea() {
  {    
 
      matoLista.forEach(solu =>
-     {   
+     {  
+        kanvaasiCtx.shadowColor = 'red';
+        kanvaasiCtx.shadowBlur = 5;
+        kanvaasiCtx.strokeStyle = 'black';
+        kanvaasiCtx.lineWidth = 1;
         kanvaasiCtx.drawImage(mato, solu.x, solu.y,matoAskel, matoAskel);
+        kanvaasiCtx.strokeRect(solu.x, solu.y, matoAskel, matoAskel);
      });
  }
 
  function piirraRuoka()
  {   
     kanvaasiCtx.drawImage(omena, ruoka.x, ruoka.y,matoAskel, matoAskel);
- }
-
- function drawRectangle(x, y, color, size)
- {
-     kanvaasiCtx.beginPath();
-     kanvaasiCtx.rect(x, y, size, size);
-     kanvaasiCtx.fillStyle = color;
-     kanvaasiCtx.fill();
  }
 
  function luoRuoka()
@@ -216,4 +229,3 @@ function aloitaPeliVaikea() {
      max = Math.floor(max);
      return Math.floor(Math.random() * (max - min + 1)) + min;
  }
-

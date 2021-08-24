@@ -8,10 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="ylapalkki"><h1>MatoPeli</h1></div>
+    <div class="ylapalkki"></div>
     <div id="tekijapalkki"><p>TERVETULOA PELAAMAAN MATOPELIÄ!</p></div>
     <div id="pistepalkki"><p>ENNÄTYS: <span id="ennatys">0</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  PISTEET: <span id="pisteet">0</span></p></div>
     <div id="loppupalkki"><p><span id="peliloppui">ET RIKKONNUT ENNÄTYSTÄ!</span> PISTEET: <span id="pisteetLoppu">0</span></p></div>
+    <div id="alku" onclick="aloitus()"><h1 id="pompputeksti">MatoPeli</h1><p>klikkaa ruutua aloittaaksesi</p></div>
     <div id="menu"><p>
         VALITSE VAIKEUSTASO:
             <br>
@@ -43,8 +44,9 @@
     </p></div>    
     <canvas id="kanvaasi" width="400px" height="400px"></canvas>
     <div class="pohjateksti"><p>Tekijä: Samuli Koppi TiVi20C</p></div>
- 
+    <audio id="musiikki" autoplay><source src="sfx/menu.mp3" type="audio/mpeg"></audio>
 <script src="matopeli.js"></script>
+<script src="sound.js"></script>
 </body>
  
 </html>
