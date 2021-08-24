@@ -1,18 +1,15 @@
-@font-face {
-  font-family: pixelfont;
-  src: url(font/pixelfont.ttf);
-}
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 body {
   background-color: darkblue;
-  font-family: pixelfont;
+  font-family: "VT323", monospace;
 }
 canvas {
   margin-top: 10px;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
-  border: 5px solid whitesmoke;
-  border-radius: 9px;
+  border: 8px solid whitesmoke;
+  border-radius: 10px;
   transform: translate(-50%, -50%);
 }
 h1 {
@@ -20,8 +17,8 @@ h1 {
   padding-top: 50px;
   text-align: center;
   margin: 0px;
-  font-size: 3rem;
-  text-shadow: 4px 2px #ff0000, 4px 2px #ff0000;
+  font-size: 2.5rem;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
 .header {
   padding: 0;
@@ -33,4 +30,35 @@ h1 {
   transform: translate(-50%, 0%);
   line-height: 0px;
   text-align: center;
+}
+footer {
+  font-size: 1.75em;
+  font-weight: bold;
+  position: fixed;
+  bottom: 10%;
+  left: 42.5%;
+  text-shadow: 1px -1px #ffffff, -1px 1px #ffffff;
+}
+.score {
+  color: yellow;
+  padding-top: 50px;
+  text-align: center;
+  margin: 0px;
+  font-size: 2.5rem;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+}
+.game-controls {
+  color: yellow;
+  padding-top: 50px;
+  margin-top: 12%;
+  margin-left: .75%;
+  font-size: 2.5rem;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+}
+.level {
+  color: yellow;
+  font-size: 2.5rem;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  margin-top: -10%;
+  margin-left: 22%;
 }

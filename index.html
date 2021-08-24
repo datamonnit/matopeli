@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="index.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <title>Matopeli-Canvas</title>
 
@@ -13,13 +13,14 @@
 
 <body>
     <br> <br>
-    <h1 class="header">Matopeli</h1>
+    <h1 class="header">Snake</h1>
+    <h3 class="score">Score: <span id="score">0</span></h3>
     <canvas id="game_canvas" width="600" height="600"></canvas>
-    <script src="index.js"></script>
-    <script src="player.js"></script>
+    <h5 class="game-controls">Controls: W, A, S, D or Arrowkeys</h5>
+    <h5 class="level">Level: <span id="levelcount">1</span></h5>
 
 
-
+    <footer>Tekijä : Niko Eklöf &copy; 2021</footer>
 </body>
 
 </html>
