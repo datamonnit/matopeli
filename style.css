@@ -2,15 +2,17 @@
 body {
   background-color: darkblue;
   font-family: "VT323", monospace;
+  margin: 0;
+  padding: 0;
 }
-canvas {
-  margin-top: 10px;
+#canvasGame {
   position: absolute;
-  top: 50%;
+
+  top: 250px;
   left: 50%;
+  transform: translate(-50%, 0%);
   border: 8px solid whitesmoke;
   border-radius: 10px;
-  transform: translate(-50%, -50%);
 }
 h1 {
   color: yellow;
@@ -21,25 +23,27 @@ h1 {
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
 .header {
+  text-align: center;
+  width: 100%;
+  height: 15px;
+}
+#footer2 {
+  font-size: 1.75em;
+  font-weight: bold;
   padding: 0;
   margin: 0;
-  position: relative;
-  top: 5px;
+  position: absolute;
+  top: 900px;
   left: 50%;
   width: 400px;
   transform: translate(-50%, 0%);
   line-height: 0px;
   text-align: center;
-}
-footer {
-  font-size: 1.75em;
-  font-weight: bold;
-  position: fixed;
-  bottom: 10%;
-  left: 42.5%;
-  text-shadow: 1px -1px #ffffff, -1px 1px #ffffff;
+  text-shadow: 1px 1px #ffffff, -1px -1px #ffffff;
+
 }
 .score {
+  
   color: yellow;
   padding-top: 50px;
   text-align: center;
@@ -47,18 +51,25 @@ footer {
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
-.game-controls {
+#gameControls {
+  padding-top: 20px;
+  padding-left: 55px;
+  display: flex;
+  position: relative;
   color: yellow;
-  padding-top: 50px;
-  margin-top: 12%;
-  margin-left: .75%;
+  max-width: 450px;
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
-.level {
+
+#levelCounter {
+  padding-top: 20px;
+  padding-left: 55px;
+  display: flex;
+  position: relative;
+  max-width: 200px;
+  max-height: fit-content;
   color: yellow;
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
-  margin-top: -10%;
-  margin-left: 22%;
 }

@@ -11,6 +11,7 @@ var tilecount = 30
 var gamespeed = 10
 var overallscore = 0;
 var directionchanged;
+
 window.onload = function() {
     gameboard = document.getElementById('game_canvas')
     gameboard_ctx = gameboard.getContext("2d")
@@ -43,12 +44,8 @@ function step() {
     player.moveSnake();
     isGameOver();
     checkAppleCollision();
-
-
     drawApple();
     player.drawPlayer();
-
-
 }
 
 function drawApple() {
