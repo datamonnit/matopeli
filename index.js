@@ -10,7 +10,13 @@ var appleY;
 var tilecount = 30
 var gamespeed = 10
 var overallscore = 0;
+var highscore = localStorage.getItem('savedHighScore');
+if (highscore == null || highscore == NaN) {
+    highscore = 0
+}
 var directionchanged;
+var gameOver = false
+document.body.addEventListener('keydown', change_direction);
 
 window.onload = function() {
     gameboard = document.getElementById('game_canvas')
@@ -26,6 +32,8 @@ window.onload = function() {
     console.log(appleX, appleY)
 
 }
+
+document.getElementById('highScore').innerHTML = highscore
 
 
 //Piirtää canvakselle reunan ja asettaa taustan valkoiseksi
@@ -83,7 +91,7 @@ function checkAppleCollision() {
         clearInterval(gameLoop)
         gameLoop = setInterval(step, 1000 / gamespeed)
         console.log(gamespeed)
-        document.getElementById('score').innerHTML = overallscore
+        document.getElementById('currentscore').innerHTML = overallscore
 
 
     }
@@ -91,7 +99,7 @@ function checkAppleCollision() {
 }
 
 function isGameOver() {
-    let gameOver = false
+
     if (player.velocityX === 0 && player.velocityY === 0) {
         return false;
     }
@@ -116,16 +124,28 @@ function isGameOver() {
 
     if (gameOver == true) {
         clearInterval(gameLoop)
-        return;
+        document.getElementById('gameOver').style.display = "block";
+
+        if (overallscore >= highscore) {
+            highscore = overallscore
+            document.getElementById('highScore').innerHTML = highscore
+            var savedHighscore = highscore
+            localStorage.setItem('savedHighScore', savedHighscore)
+        }
+
+        document.body.addEventListener('keydown', reload);
+
     }
+
 
 }
 
 
-document.body.addEventListener('keydown', change_direction);
+
 
 function change_direction(event) {
-    //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
+    console.log(event.which)
+        //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
     if (directionchanged == false) {
         // estää pelaajaa peruuttamasta
 
@@ -167,6 +187,15 @@ function change_direction(event) {
         return
     }
 }
+
+function reload(event) {
+
+    if (event.which == 32) {
+        location.reload()
+
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Tästä alkaa pelaaja luokka, oli erillisessä tiedostossa mutta ei koulun palvelimella toiminut jostain syystä
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
