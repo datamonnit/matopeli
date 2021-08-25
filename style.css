@@ -22,6 +22,10 @@ h1 {
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
+ol {
+  margin: 0;
+  padding: 0;
+}
 .header {
   text-align: center;
   width: 100%;
@@ -50,23 +54,25 @@ h1 {
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
 #gameControls {
-  padding-top: 20px;
-  padding-left: 55px;
-  display: flex;
-  position: relative;
+  top: 80%;
+  left: 15%;
+  text-align: center;
+  display: block;
+  position: absolute;
   color: yellow;
-  max-width: 450px;
+
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
 }
 
 #levelCounter {
-  padding-top: 20px;
-  padding-left: 55px;
-  display: flex;
-  position: relative;
-  max-width: 200px;
-  max-height: fit-content;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 27%;
+  display: block;
+  position: absolute;
+  text-align: center;
   color: yellow;
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
@@ -76,11 +82,57 @@ h1 {
   text-align: center;
   position: absolute;
 
-  top: 350px;
+  top: 150px;
   left: 50%;
   transform: translate(-50%, 0%);
 
   color: yellow;
   font-size: 2.5rem;
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+}
+.game-btn {
+  padding: 10px;
+  min-width: 220px;
+  display: block;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 2rem;
+  color: yellow;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  background-color: darkblue;
+  border: 3px solid yellow;
+}
+.game-btn:hover {
+  cursor: pointer;
+  background-color: rgb(0, 94, 126);
+}
+#levelSelect {
+  width: fit-content;
+  display: block;
+  position: absolute;
+  top: 30%;
+  left: 33%;
+  text-align: center;
+}
+#languageSelect {
+  top: 33%;
+  left: 110%;
+  position: absolute;
+}
+.game-btn2 {
+  padding: 10px;
+  min-width: 220px;
+  display: block;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 2rem;
+  color: yellow;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  background-color: darkblue;
+  border: 3px solid yellow;
+  box-shadow: 3px 1px #ff0000, 3px 3px #ff0000;
+}
+.game-btn2:hover {
+  cursor: pointer;
+  background-color: rgb(0, 94, 126);
 }

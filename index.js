@@ -1,5 +1,7 @@
 const gameboard_background = 'black'
 const gameboard_border = 'black'
+const gameboard_wall = 'rgba(251, 255, 0, 0.9)'
+const gameboard_wall_border = 'white'
 
 var gameboard;
 var gameboard_ctx;
@@ -10,10 +12,13 @@ var appleY;
 var tilecount = 30
 var gamespeed = 10
 var overallscore = 0;
-var highscore = localStorage.getItem('savedHighScore');
-if (highscore == null || highscore == NaN) {
-    highscore = 0
-}
+///////////////////////////////////////////////
+//Tasojen pisteet
+var level1Highscore = localStorage.getItem('savedHighScore1');
+var level2Highscore = localStorage.getItem('savedHighScore2');
+var level3Highscore = localStorage.getItem('savedHighScore3');
+///////////////////////////////////////////////
+var levelSelected = 1;
 var directionchanged;
 var gameOver = false
 document.body.addEventListener('keydown', change_direction);
@@ -21,8 +26,7 @@ document.body.addEventListener('keydown', change_direction);
 window.onload = function() {
     gameboard = document.getElementById('game_canvas')
     gameboard_ctx = gameboard.getContext("2d")
-
-    //aloittaa gameloopin
+        //aloittaa gameloopin
     gameLoop = setInterval(step, 1000 / gamespeed)
         //luo pelaajan
     player = new Player(tilecount * 10, tilecount * 10)
@@ -33,7 +37,7 @@ window.onload = function() {
 
 }
 
-document.getElementById('highScore').innerHTML = highscore
+
 
 
 //Piirtää canvakselle reunan ja asettaa taustan valkoiseksi
@@ -43,7 +47,85 @@ function clearCanvas() {
     gameboard_ctx.fillRect(0, 0, gameboard.width, gameboard.height);
 }
 
+function levelClassic() {
+    if (level1Highscore == null || level1Highscore == undefined) {
+        level1Highscore = 0
+    }
+    document.getElementById('highScore').innerHTML = level1Highscore
+    document.getElementById('levelcount').innerHTML = 'Classic'
+}
 
+function levelCage() {
+    if (level2Highscore == null || level2Highscore == undefined) {
+        level2Highscore = 0
+    }
+    document.getElementById('highScore').innerHTML = level2Highscore
+    document.getElementById('levelcount').innerHTML = 'Cage'
+    gameboard_ctx.fillStyle = gameboard_wall
+    gameboard_ctx.lineWidth = 3
+
+    //Seinien koordinaatit collisionia varten
+
+    wallLeft = [80, 160, 440]
+    wallRight = [500, 160, 440]
+    wallUp = [100, 160, 420]
+    wallDown = [500, 160, 420]
+        //piirretään seinät
+        //vasen
+    gameboard_ctx.fillRect(80, 160, 20, 300),
+        gameboard_ctx.strokeRect(80, 160, 20, 300)
+
+    //oikea
+    gameboard_ctx.fillRect(500, 160, 20, 300),
+        gameboard_ctx.strokeRect(500, 160, 20, 300)
+
+    //ylä
+    gameboard_ctx.fillRect(160, 100, 280, 20),
+        gameboard_ctx.strokeRect(160, 100, 280, 20)
+
+    //ala
+    gameboard_ctx.fillRect(160, 500, 280, 20),
+        gameboard_ctx.strokeRect(160, 500, 280, 20)
+
+
+
+
+}
+
+function levelVertical() {
+    if (level3Highscore == null || level3Highscore == undefined) {
+        level3Highscore = 0
+    }
+    document.getElementById('highScore').innerHTML = level3Highscore
+
+    document.getElementById('levelcount').innerHTML = 'Vertical'
+    gameboard_ctx.fillStyle = gameboard_wall
+    gameboard_ctx.lineWidth = 3
+
+    //Seinien koordinaatit collisionia varten, järjestys X, Y, pituus
+
+    wallLeft = [80, 100, 480]
+    wallRight = [500, 100, 480]
+    wallUp = [380, 100, 480]
+    wallDown = [200, 100, 480]
+        //piirretään seinät
+        //vasen
+    gameboard_ctx.fillRect(80, 100, 20, 400),
+        gameboard_ctx.strokeRect(80, 100, 20, 400)
+
+    //oikea
+    gameboard_ctx.fillRect(500, 100, 20, 400),
+        gameboard_ctx.strokeRect(500, 100, 20, 400)
+
+    //ylä
+    gameboard_ctx.fillRect(380, 100, 20, 400),
+        gameboard_ctx.strokeRect(380, 100, 20, 400)
+
+    //ala
+    gameboard_ctx.fillRect(200, 100, 20, 400),
+        gameboard_ctx.strokeRect(200, 100, 20, 400)
+
+}
 
 
 function step() {
@@ -54,16 +136,27 @@ function step() {
     checkAppleCollision();
     drawApple();
     player.drawPlayer();
+    console.log(player.x, player.y)
+    switch (levelSelected) {
+        case 1:
+            levelClassic();
+            return
+        case 2:
+            levelCage();
+            return
+        case 3:
+            levelVertical();
+            return
+        default:
+            levelClassic();
+    }
+
+
 }
 
 function drawApple() {
     x = appleX
     y = appleY
-        //tarkistetaan ettei omena ole pelaajan sisällä
-    if (x == player.x && y == player.y) {
-        x = appleX
-        y = appleY
-    }
     gameboard_ctx.fillStyle = 'red'
     gameboard_ctx.strokeStyle = 'lightgreen'
     gameboard_ctx.lineWidth = 2
@@ -73,18 +166,10 @@ function drawApple() {
 }
 
 function checkAppleCollision() {
-    if (appleX == player.x && appleY == player.y) {
+    if (appleX === player.x && appleY === player.y) {
         appleX = Math.floor(Math.random() * tilecount) * 20
         appleY = Math.floor(Math.random() * tilecount) * 20
-        newApplex = appleX
-        newAppley = appleY
-            //tarkistetaan ettei uusi omena ole käärmeen sisällä, jos on niin luodaan uusi omena
-        for (let i = 0; i < player.snake_parts.length; i++) {
-            if (newApplex == player.snake_parts[i].x && newAppley == player.snake_parts[i].y) {
-                appleX = Math.floor(Math.random() * tilecount) * 20
-                appleY = Math.floor(Math.random() * tilecount) * 20
-            }
-        }
+        drawApple()
         player.addpart()
         overallscore++
         gamespeed = gamespeed + 0.25
@@ -92,7 +177,53 @@ function checkAppleCollision() {
         gameLoop = setInterval(step, 1000 / gamespeed)
         console.log(gamespeed)
         document.getElementById('currentscore').innerHTML = overallscore
-
+    }
+    if (levelSelected == 2) {
+        //tarkistetaan ettei uusi omena ole käärmeen tai seinän sisällä, jos on niin luodaan uusi omena
+        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleY === wallDown[0] && appleX >= wallDown[1] && appleX <= wallDown[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleY === wallUp[0] && appleX >= wallUp[1] && appleX <= wallUp[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        }
+    }
+    if (levelSelected == 3) {
+        //tarkistetaan ettei uusi omena ole käärmeen tai seinän sisällä, jos on niin luodaan uusi omena
+        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleX === wallDown[0] && appleY >= wallDown[1] && appleY <= wallDown[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        } else if (appleX === wallUp[0] && appleY >= wallUp[1] && appleY <= wallUp[2]) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        }
+    }
+    for (let i = 0; i < player.snake_parts.length; i++) {
+        if (appleX == player.snake_parts[i].x && appleY == player.snake_parts[i].y) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+            drawApple()
+        }
 
     }
 
@@ -104,36 +235,108 @@ function isGameOver() {
         return false;
     }
 
-    //onko pelaaja osunut seinään
-    if (player.x < 0) {
-        gameOver = true
-    } else if (player.x === gameboard.width) {
-        gameOver = true
-    } else if (player.y < 0) {
-        gameOver = true
-    } else if (player.y === gameboard.height) {
-        gameOver = true
-    }
-    for (let i = 0; i < player.snake_parts.length; i++) {
-        let part = player.snake_parts[i]
-        if (part.x === player.x && part.y === player.y) {
+    //onko pelaaja osunut seinään tasossa classic
+    if (levelSelected == 1) {
+        if (player.x < 0) {
             gameOver = true
-            break;
+        } else if (player.x === gameboard.width) {
+            gameOver = true
+        } else if (player.y < 0) {
+            gameOver = true
+        } else if (player.y === gameboard.height) {
+            gameOver = true
+        }
+        for (let i = 0; i < player.snake_parts.length; i++) {
+            let part = player.snake_parts[i]
+            if (part.x === player.x && part.y === player.y) {
+                gameOver = true
+                break;
+            }
         }
     }
+    //onko pelaaja osunut seinään tasossa cage
+    if (levelSelected == 2) {
+        if (player.x < 0) {
+            gameOver = true
+        } else if (player.x === gameboard.width) {
+            gameOver = true
+        } else if (player.y < 0) {
+            gameOver = true
+        } else if (player.y === gameboard.height) {
+            gameOver = true
+        } else if (player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2]) {
+            gameOver = true
+        } else if (player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2]) {
+            gameOver = true
+        } else if (player.y === wallDown[0] && player.x >= wallDown[1] && player.x <= wallDown[2]) {
+            gameOver = true
+        } else if (player.y === wallUp[0] && player.x >= wallUp[1] && player.x <= wallUp[2]) {
+            gameOver = true
+        }
+    }
+    //onko pelaaja osunut seinään tasossa vertical
+    if (levelSelected == 3) {
+        if (player.x < 0) {
+            gameOver = true
+        } else if (player.x === gameboard.width) {
+            gameOver = true
+        } else if (player.y < 0) {
+            gameOver = true
+        } else if (player.y === gameboard.height) {
+            gameOver = true
+        } else if (player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2]) {
+            gameOver = true
+        } else if (player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2]) {
+            gameOver = true
+        } else if (player.x === wallDown[0] && player.y >= wallDown[1] && player.y <= wallDown[2]) {
+            gameOver = true
+        } else if (player.x === wallUp[0] && player.y >= wallUp[1] && player.y <= wallUp[2]) {
+            gameOver = true
+        }
+        for (let i = 0; i < player.snake_parts.length; i++) {
+            let part = player.snake_parts[i]
+            if (part.x === player.x && part.y === player.y) {
+                gameOver = true
+                break;
+            }
+        }
+    }
+
 
     if (gameOver == true) {
         clearInterval(gameLoop)
         document.getElementById('gameOver').style.display = "block";
-
-        if (overallscore >= highscore) {
-            highscore = overallscore
-            document.getElementById('highScore').innerHTML = highscore
-            var savedHighscore = highscore
-            localStorage.setItem('savedHighScore', savedHighscore)
+        document.body.addEventListener('keydown', reload);
+        switch (levelSelected) {
+            case 1:
+                if (overallscore >= level1Highscore) {
+                    level1Highscore = overallscore
+                    document.getElementById('highScore').innerHTML = level1Highscore
+                    var savedHighScore1 = level1Highscore
+                    localStorage.setItem('savedHighScore1', savedHighScore1)
+                }
+                return
+            case 2:
+                if (overallscore >= level2Highscore) {
+                    level2Highscore = overallscore
+                    document.getElementById('highScore').innerHTML = level2Highscore
+                    var savedHighScore2 = level2Highscore
+                    localStorage.setItem('savedHighScore2', savedHighScore2)
+                }
+                return
+            case 3:
+                if (overallscore >= level3Highscore) {
+                    level3Highscore = overallscore
+                    document.getElementById('highScore').innerHTML = level3Highscore
+                    var savedHighScore3 = level3Highscore
+                    localStorage.setItem('savedHighScore3', savedHighScore3)
+                }
+                return
+            default:
+                return
         }
 
-        document.body.addEventListener('keydown', reload);
+
 
     }
 
@@ -185,6 +388,12 @@ function change_direction(event) {
         }
     } else {
         return
+    }
+    if (player.velocityX != 0 || player.velocityY != 0) {
+        document.getElementById('levelCounter').style.display = "none"
+        document.getElementById('gameControls').style.display = "none"
+        document.getElementById('levelSelect').style.display = "none"
+
     }
 }
 

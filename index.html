@@ -12,21 +12,38 @@
 </head>
 
 <body>
+
     <br> <br>
     <h1 class="header">Snake</h1>
-    <h3 id="score">Score: <span id="currentscore">0</span> <br>  Highscore: <span id="highScore">0</span> </h3>
+    <h3 id="score">Score: <span id="currentscore">0</span> <br>Level Highscore: <span id="highScore">0</span> </h3>
     <div id="canvasGame">
+        <!-- <div id="languageSelect">
+            <button class="game-btn2">Suomi</button>
+            <br>
+            <button class="game-btn2">English</button>
+        </div> -->
         <canvas id="game_canvas" width="600" height="600"></canvas>
+        <div id="gameControls">
+            <h5 class="game-controls">Controls: W, A, S, D or Arrowkeys</h5>
+        </div>
+        <div id="levelCounter">
+            <h5 class="level">Selected Level: <span id="levelcount"></span></h5>
+        </div>
+        <div id="gameOver">
+            Game Over! <br> Press Spacebar to start again
+        </div>
+        <div id="levelSelect">
+            <ol> <button class="game-btn" onclick="levelClassic(), levelSelected = 1">Level: Classic</button>
+                <br>
+                <button class="game-btn" onclick="levelCage(), levelSelected = 2">Level: Cage</button>
+                <br>
+                <button class="game-btn" onclick="levelVertical(), levelSelected = 3">Level: Vertical</button></ol>
+
+        </div>
+
+
     </div>
-    <div id="gameControls">
-        <h5 class="game-controls">Controls: W, A, S, D or Arrowkeys</h5>
-    </div>
-    <div id="levelCounter">
-        <h5 class="level">Level: <span id="levelcount">Classic</span></h5>
-    </div>
-    <div id="gameOver">
-        Game Over! <br> Press Spacebar to start again
-    </div>
+
     <div id="footer2">
         <footer>Creator : Niko Eklöf &copy; 2021</footer>
     </div>
