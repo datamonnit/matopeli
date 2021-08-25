@@ -101,6 +101,7 @@ ol {
   text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
   background-color: darkblue;
   border: 3px solid yellow;
+  box-shadow: 3px 1px #ff0000, 3px 3px #ff0000;
 }
 .game-btn:hover {
   cursor: pointer;
@@ -118,21 +119,4 @@ ol {
   top: 33%;
   left: 110%;
   position: absolute;
-}
-.game-btn2 {
-  padding: 10px;
-  min-width: 220px;
-  display: block;
-  font-family: inherit;
-  font-weight: bold;
-  font-size: 2rem;
-  color: yellow;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
-  background-color: darkblue;
-  border: 3px solid yellow;
-  box-shadow: 3px 1px #ff0000, 3px 3px #ff0000;
-}
-.game-btn2:hover {
-  cursor: pointer;
-  background-color: rgb(0, 94, 126);
 }
