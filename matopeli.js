@@ -6,9 +6,11 @@
  var ruoka = { x: 0, y: 0 };
  var pisteet = 0;
  var huippupisteet = 0;
-
+ var suuntax= 0;
+ var suuntay= 0;
  var omppuSfx;
  var ennatySfx;
+ 
  
 
 
@@ -26,8 +28,21 @@
  
  var mato = new Image();
  mato.src = 'kuvat/mato.png';
+ 
+ var matox0 = new Image();
+ matox0.src = 'kuvat/matox0.png';
 
+ var matox1 = new Image();
+ matox1.src = 'kuvat/matox1.png';
+ 
+ var matoy0 = new Image();
+ matoy0.src = 'kuvat/matoy0.png';
 
+ var matoy1 = new Image();
+ matoy1.src = 'kuvat/matoy1.png';
+ 
+ var hanta = new Image();
+ hanta.src = 'kuvat/hanta.png';
 
  luoRuoka();
 
@@ -41,24 +56,28 @@
              return
              matoLiikkuminen.x = 0;
              matoLiikkuminen.y = -matoAskel;
+             suuntay=1;
              break;
          case 37:
             if (matoLiikkuminen.x == matoAskel)
             return    
              matoLiikkuminen.x = -matoAskel;
              matoLiikkuminen.y = 0;
+             suuntax=-1;
              break;
          case 39:  
          if (matoLiikkuminen.x == -matoAskel)
              return     
              matoLiikkuminen.x = matoAskel;
              matoLiikkuminen.y = 0;
+             suuntax=1;
              break;
          case 40:
             if (matoLiikkuminen.y == -matoAskel)
             return    
              matoLiikkuminen.x = 0;
              matoLiikkuminen.y = matoAskel;
+             suuntay=-1;
              break;
      }
  };
@@ -199,17 +218,27 @@ function aloitaPeliVaikea() {
  }
 
  function piirraMato()
- {    
-
+ {    var vikapala = matoLista.length - 1;
+    
      matoLista.forEach(solu =>
      {  
-        kanvaasiCtx.shadowColor = 'red';
-        kanvaasiCtx.shadowBlur = 5;
-        kanvaasiCtx.strokeStyle = 'black';
-        kanvaasiCtx.lineWidth = 1;
         kanvaasiCtx.drawImage(mato, solu.x, solu.y,matoAskel, matoAskel);
-        kanvaasiCtx.strokeRect(solu.x, solu.y, matoAskel, matoAskel);
      });
+    
+    kanvaasiCtx.drawImage(hanta, matoLista[vikapala].x, matoLista[vikapala].y,matoAskel, matoAskel);
+     
+    if ( matoLiikkuminen.x == 0 && matoLiikkuminen.y == -matoAskel) {
+        kanvaasiCtx.drawImage(matoy1, matoLista[0].x, matoLista[0].y-7,matoAskel, matoAskel);
+    }
+    if ( matoLiikkuminen.x == 0 && matoLiikkuminen.y == matoAskel) {
+        kanvaasiCtx.drawImage(matoy0, matoLista[0].x, matoLista[0].y+7,matoAskel, matoAskel);
+    }
+    if (matoLiikkuminen.x == matoAskel && matoLiikkuminen.y == 0) {
+        kanvaasiCtx.drawImage(matox1, matoLista[0].x+7, matoLista[0].y,matoAskel, matoAskel);
+    }
+    if (matoLiikkuminen.x == -matoAskel && matoLiikkuminen.y == 0) {
+        kanvaasiCtx.drawImage(matox0, matoLista[0].x-7, matoLista[0].y,matoAskel, matoAskel);
+    }    
  }
 
  function piirraRuoka()
