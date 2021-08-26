@@ -242,7 +242,6 @@ function vihunSuunta() {
         vihuaskel=20;
     }
     vihuLiikkuminen.y = vihuLiikkuminen.y+vihuaskel;
-    console.log(vihuLiikkuminen.y);
 }
 
 
