@@ -2,6 +2,7 @@
  var kanvaasiCtx;
  var matoLista = [{ x: 20, y: 20 }];
  var matoLiikkuminen = { x: 20, y: 0 };
+ var vihuLiikkuminen = { x: 200, y: 0 };
  var matoAskel = 20;
  var ruoka = { x: 0, y: 0 };
  var pisteet = 0;
@@ -10,6 +11,8 @@
  var suuntay= 0;
  var omppuSfx;
  var ennatySfx;
+ var vihuaskel=20;
+ 
  
  
 
@@ -43,6 +46,9 @@
  
  var hanta = new Image();
  hanta.src = 'kuvat/hanta.png';
+ 
+ var hamis = new Image();
+ hamis.src = 'kuvat/hamis.png';
 
  luoRuoka();
 
@@ -172,6 +178,10 @@ function aloitaPeliVaikea() {
         matoLista[0].y === matoLista[i-1].y
           ) return true
     }
+    for (var i = 0; i < matoLista.length; i++) {
+        if (matoLista[i].x === vihuLiikkuminen.x && matoLista[i].y === vihuLiikkuminen.y)
+        return true
+      } 
     const osuiVasenSeina = matoLista[0].x < 0;
     const osuiOikeaSeina = matoLista[0].x > kanvaasi.width - 20;
     const osuiYlaSeina = matoLista[0].y < 0;
@@ -202,9 +212,10 @@ function aloitaPeliVaikea() {
 
  function draw()
  {
-     tyhjennaKanvaasi("blanchedalmond")
+     tyhjennaKanvaasi("blanchedalmond");
      piirraMato();
      piirraRuoka();
+     piirraVihu();
  }
 
  function tyhjennaKanvaasi(color)
@@ -216,6 +227,24 @@ function aloitaPeliVaikea() {
      kanvaasiCtx.rect(0, 0, kanvaasi.width, kanvaasi.height);
      kanvaasiCtx.fill();
  }
+function piirraVihu()
+{      
+    vihunSuunta();
+    kanvaasiCtx.drawImage(hamis, vihuLiikkuminen.x, vihuLiikkuminen.y,20, 20);
+}
+
+function vihunSuunta() {
+
+    if (vihuLiikkuminen.y >= 380) {
+        vihuaskel=-20;
+    }
+    if (vihuLiikkuminen.y <= 0) {
+        vihuaskel=20;
+    }
+    vihuLiikkuminen.y = vihuLiikkuminen.y+vihuaskel;
+    console.log(vihuLiikkuminen.y);
+}
+
 
  function piirraMato()
  {    var vikapala = matoLista.length - 1;
