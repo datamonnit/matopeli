@@ -16,7 +16,9 @@
  var vihuy = -20;
  var vaikeustasokerroin = 3;
 
- 
+ var peliloop; 
+
+ var x= 0;
  
 
 
@@ -28,6 +30,10 @@
 
  var kentanLeveys = kanvaasi.width;
  var kentanKorkeus = kanvaasi.height;
+ 
+ omenaSfx = new sound("sfx/omppu.ogg");
+ ennatysSfx = new sound("sfx/voitto.mp3");
+
 
  var omena = new Image();
  omena.src = 'kuvat/omena.png';
@@ -109,7 +115,7 @@ function aloitaPeli() {
     document.getElementById("tekijapalkki").style.display ="none"; 
     document.getElementById("pistepalkki").style.display ="inline";
     document.getElementById("musiikki").src = "sfx/helppo.mp3";    
-    setInterval(peliLoop, 200);
+    peliloop = setInterval(peliLoop, 200);
 }
 
 function aloitaPeliKeski() {
@@ -121,10 +127,10 @@ function aloitaPeliKeski() {
     matoLiikkuminen = { x: 20, y: 0 };
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
-   document.getElementById("tekijapalkki").style.display ="none"; 
-   document.getElementById("pistepalkki").style.display ="inline";
-   document.getElementById("musiikki").src = "sfx/keskivaikea.mp3";  
-   setInterval(peliLoop, 120);
+    document.getElementById("tekijapalkki").style.display ="none"; 
+    document.getElementById("pistepalkki").style.display ="inline";
+    document.getElementById("musiikki").src = "sfx/keskivaikea.mp3";  
+    peliloop = setInterval(peliLoop, 120);
 }
 
 function aloitaPeliVaikea() {
@@ -136,22 +142,21 @@ function aloitaPeliVaikea() {
     matoLiikkuminen = { x: 20, y: 0 };
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
-   document.getElementById("tekijapalkki").style.display ="none"; 
-   document.getElementById("pistepalkki").style.display ="inline";
-   document.getElementById("musiikki").src = "sfx/vaikea.mp3";  
-   setInterval(peliLoop, 70);
-}
+    document.getElementById("tekijapalkki").style.display ="none"; 
+    document.getElementById("pistepalkki").style.display ="inline";
+    document.getElementById("musiikki").src = "sfx/vaikea.mp3";  
+    peliloop = setInterval(peliLoop, 70);
+    }
 
  function peliLoop()
- {
+ {  
     if (loppuiko_peli()) {
-        document.getElementById("musiikki").src = "";  
-        peliOhi();  
+        peliOhi(); 
+        clearInterval(peliloop); 
     } 
-    omenaSfx = new sound("sfx/omppu.ogg");
-    ennatysSfx = new sound("sfx/voitto.mp3");
      update();
      draw();
+     console.log(x++);
  }
  
  function update()
@@ -239,6 +244,7 @@ function aloitaPeliVaikea() {
      kanvaasiCtx.rect(0, 0, kanvaasi.width, kanvaasi.height);
      kanvaasiCtx.fill();
  }
+ 
 function piirraVihu()
 {      
     vihunSuunta();
