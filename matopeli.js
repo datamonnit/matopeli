@@ -12,7 +12,10 @@
  var omppuSfx;
  var ennatySfx;
  var vihuaskel=20;
- 
+ var vihux = -20;
+ var vihuy = -20;
+ var vaikeustasokerroin = 3;
+
  
  
 
@@ -21,7 +24,7 @@
  kanvaasiCtx = kanvaasi.getContext("2d");
 
  document.getElementById("menu").style.width = innerWidth/2;
- document.getElementById("menu").style.width = innerHeight/2;
+ document.getElementById("menu").style.height = innerHeight/2;
 
  var kentanLeveys = kanvaasi.width;
  var kentanKorkeus = kanvaasi.height;
@@ -49,6 +52,8 @@
  
  var hamis = new Image();
  hamis.src = 'kuvat/hamis.png';
+ var hamis2 = new Image();
+ hamis2.src = 'kuvat/hamis2.png';
 
  luoRuoka();
 
@@ -94,8 +99,8 @@ function aloitus(){
     document.getElementById("alku").style.display="none";
 }
 function aloitaPeli() {
-    if (sessionStorage.getItem("pisteet")>huippupisteet) {
-        huippupisteet= sessionStorage.getItem("pisteet");
+    if (localStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= localStorage.getItem("pisteet");
     }
     pistekerroin = 1;
     matoLiikkuminen = { x: 20, y: 0 };
@@ -108,31 +113,33 @@ function aloitaPeli() {
 }
 
 function aloitaPeliKeski() {
-    if (sessionStorage.getItem("pisteet")>huippupisteet) {
-        huippupisteet= sessionStorage.getItem("pisteet");
+    if (localStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= localStorage.getItem("pisteet");
     }
     pistekerroin = 1.5;
+    vaikeustasokerroin=2;
     matoLiikkuminen = { x: 20, y: 0 };
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
    document.getElementById("tekijapalkki").style.display ="none"; 
    document.getElementById("pistepalkki").style.display ="inline";
    document.getElementById("musiikki").src = "sfx/keskivaikea.mp3";  
-   setInterval(peliLoop, 100);
+   setInterval(peliLoop, 120);
 }
 
 function aloitaPeliVaikea() {
-    if (sessionStorage.getItem("pisteet")>huippupisteet) {
-        huippupisteet= sessionStorage.getItem("pisteet");
+    if (localStorage.getItem("pisteet")>huippupisteet) {
+        huippupisteet= localStorage.getItem("pisteet");
     }
     pistekerroin = 2;
+    vaikeustasokerroin=1;
     matoLiikkuminen = { x: 20, y: 0 };
     document.getElementById("ennatys").innerHTML=huippupisteet;
     document.getElementById("menu").style.display = "none";
    document.getElementById("tekijapalkki").style.display ="none"; 
    document.getElementById("pistepalkki").style.display ="inline";
    document.getElementById("musiikki").src = "sfx/vaikea.mp3";  
-   setInterval(peliLoop, 50);
+   setInterval(peliLoop, 70);
 }
 
  function peliLoop()
@@ -167,6 +174,7 @@ function aloitaPeliVaikea() {
          pisteet= pisteet+1;
          document.getElementById("pisteet").innerHTML=Math.round(pisteet*pistekerroin);
          luoRuoka();
+         luoVihu();
      }
  }
 
@@ -182,6 +190,9 @@ function aloitaPeliVaikea() {
         if (matoLista[i].x === vihuLiikkuminen.x && matoLista[i].y === vihuLiikkuminen.y)
         return true
       } 
+    if (matoLista[0].x === vihux && matoLista[0].y === vihuy) {
+        return true
+    }
     const osuiVasenSeina = matoLista[0].x < 0;
     const osuiOikeaSeina = matoLista[0].x > kanvaasi.width - 20;
     const osuiYlaSeina = matoLista[0].y < 0;
@@ -193,7 +204,7 @@ function aloitaPeliVaikea() {
     if (Math.round(pisteet*pistekerroin)> huippupisteet){
     ennatysSfx.play();
     huippupisteet=Math.round(pisteet*pistekerroin);
-    sessionStorage.setItem("pisteet", huippupisteet);
+    localStorage.setItem("pisteet", huippupisteet);
     document.getElementById("peliloppui").innerText="TEIT UUDEN ENNÄTYKSEN!";
     }  
     document.getElementById("ennatys").innerHTML=huippupisteet;
@@ -216,6 +227,7 @@ function aloitaPeliVaikea() {
      piirraMato();
      piirraRuoka();
      piirraVihu();
+     piirraVihu2();
  }
 
  function tyhjennaKanvaasi(color)
@@ -286,3 +298,19 @@ function vihunSuunta() {
      max = Math.floor(max);
      return Math.floor(Math.random() * (max - min + 1)) + min;
  }
+
+ function luoVihu()
+ {
+     vihux = 20 * getRandomInt(0, kentanLeveys / 20  - 1);
+     vihuy = 20 * getRandomInt(0, kentanKorkeus / 20  - 1);
+    piirraVihu2();
+ }
+
+ function piirraVihu2() {
+    if (vihux == ruoka.x && vihuy == ruokay) {
+        luoVihu();
+    }
+    if (pisteet%vaikeustasokerroin == 0) {
+   kanvaasiCtx.drawImage(hamis2, vihux, vihuy,20, 20);
+   }
+}
