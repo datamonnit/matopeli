@@ -244,7 +244,7 @@ function aloitaPeliVaikea() {
      kanvaasiCtx.rect(0, 0, kanvaasi.width, kanvaasi.height);
      kanvaasiCtx.fill();
  }
- 
+
 function piirraVihu()
 {      
     vihunSuunta();
@@ -313,7 +313,10 @@ function vihunSuunta() {
  }
 
  function piirraVihu2() {
-    if (vihux == ruoka.x && vihuy == ruokay) {
+    if (vihux == ruoka.x && vihuy == ruoka.y) {
+        luoVihu();
+    }
+    if (vihux == matoLista[0].x && vihuy == matoLista[0].y) {
         luoVihu();
     }
     if (pisteet%vaikeustasokerroin == 0) {
