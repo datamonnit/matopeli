@@ -12,6 +12,8 @@ var appleY;
 var tilecount = 30
 var gamespeed = 10
 var overallscore = 0;
+var enemyCount = 0;
+var enemies = []
 ///////////////////////////////////////////////
 //Tasojen pisteet
 var level1Highscore = localStorage.getItem('savedHighScore1');
@@ -30,15 +32,13 @@ window.onload = function() {
     gameLoop = setInterval(step, 1000 / gamespeed)
         //luo pelaajan
     player = new Player(tilecount * 10, tilecount * 10)
-        //luodaan ensimmäisen omenan koordinaatit
+
+    //luodaan ensimmäisen omenan koordinaatit
     appleX = Math.floor(Math.random() * tilecount) * 20
     appleY = Math.floor(Math.random() * tilecount) * 20
     console.log(appleX, appleY)
 
 }
-
-
-
 
 //Piirtää canvakselle reunan ja asettaa taustan valkoiseksi
 function clearCanvas() {
@@ -133,9 +133,10 @@ function step() {
     clearCanvas();
     player.moveSnake();
     isGameOver();
-    checkAppleCollision();
+    checkUnitCollisions();
     drawApple();
-    player.drawPlayer();
+    player.drawplayer();
+    drawEnemy();
     console.log(player.x, player.y)
     switch (levelSelected) {
         case 1:
@@ -150,22 +151,21 @@ function step() {
         default:
             levelClassic();
     }
-
-
 }
 
 function drawApple() {
     x = appleX
     y = appleY
-    gameboard_ctx.fillStyle = 'red'
-    gameboard_ctx.strokeStyle = 'lightgreen'
+    gameboard_ctx.fillStyle = 'lightgreen'
+    gameboard_ctx.strokeStyle = 'white'
     gameboard_ctx.lineWidth = 2
     gameboard_ctx.fillRect(x, y, applewidth, appleheight)
     gameboard_ctx.strokeRect(x, y, applewidth, appleheight)
 
 }
 
-function checkAppleCollision() {
+function checkUnitCollisions() {
+    //tarkistetaan kaikkien pelin objektien collision, erittäin huono tapa 
     if (appleX === player.x && appleY === player.y) {
         appleX = Math.floor(Math.random() * tilecount) * 20
         appleY = Math.floor(Math.random() * tilecount) * 20
@@ -177,9 +177,64 @@ function checkAppleCollision() {
         gameLoop = setInterval(step, 1000 / gamespeed)
         console.log(gamespeed)
         document.getElementById('currentscore').innerHTML = overallscore
+            //luodaan vihollinen aina kun pelaaja on syönyt 5 omenaa ja tarkistetaan ettei vihollinen ole seinän, pelaajan tai omenan sisällä
+        if (overallscore % 3 == 0) {
+
+            addEnemy = new staticEnemy(Math.floor(Math.random() * tilecount) * 20, Math.floor(Math.random() * tilecount) * 20)
+            while (true) {
+
+                if (addEnemy.x === player.x && addEnemy.y === player.y) {
+                    addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                    addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                }
+                for (let i = 0; i < player.snake_parts.length; i++) {
+                    if (addEnemy.x === player.snake_parts[i].x && addEnemy.y === player.snake_parts[i].y) {
+                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    }
+                }
+                if (levelSelected == 2) {
+                    if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2]) {
+                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    } else if (addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2]) {
+                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    } else if (addEnemy.y === wallDown[0] && addEnemy.x >= wallDown[1] && addEnemy.x <= wallDown[2]) {
+                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    } else if (addEnemy.y === wallUp[0] && addEnemy.x >= wallUp[1] && addEnemy.x <= wallUp[2]) {
+                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    }
+                    if (levelSelected == 3) {
+                        if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2]) {
+                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                            
+                        } else if (addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2]) {
+                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                        } else if (addEnemy.x === wallDown[0] && addEnemy.y >= wallDown[1] && addEnemy.y <= wallDown[2]) {
+                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                        } else if (addEnemy.x === wallUp[0] && addEnemy.y >= wallUp[1] && addEnemy.y <= wallUp[2]) {
+                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                        }
+                    }
+                } else if (addEnemy.x === appleX && addEnemy.y === appleY) {
+                    addEnemy.x = Math.floor(Math.random() * tilecount) * 20
+                    addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                }
+                enemies.push(addEnemy)
+                break;
+            }
+
+        }
     }
     if (levelSelected == 2) {
-        //tarkistetaan ettei uusi omena ole käärmeen tai seinän sisällä, jos on niin luodaan uusi omena
+        //tarkistetaan ettei uusi omena ole seinän sisällä, jos on niin luodaan uusi omena
         if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2]) {
             appleX = Math.floor(Math.random() * tilecount) * 20
             appleY = Math.floor(Math.random() * tilecount) * 20
@@ -218,15 +273,20 @@ function checkAppleCollision() {
             drawApple()
         }
     }
+    //tarkistetaan ettei omena ole pelaajan hännän sisällä
     for (let i = 0; i < player.snake_parts.length; i++) {
         if (appleX == player.snake_parts[i].x && appleY == player.snake_parts[i].y) {
             appleX = Math.floor(Math.random() * tilecount) * 20
             appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
         }
-
     }
-
+    //tarkistetaan ettei omena ole vihollisen sisällä
+    for (let i = 0; i < enemies.length; i++) {
+        if (appleX === enemies[i].x && appleY === enemies[i].y) {
+            appleX = Math.floor(Math.random() * tilecount) * 20
+            appleY = Math.floor(Math.random() * tilecount) * 20
+        }
+    }
 }
 
 function isGameOver() {
@@ -246,13 +306,7 @@ function isGameOver() {
         } else if (player.y === gameboard.height) {
             gameOver = true
         }
-        for (let i = 0; i < player.snake_parts.length; i++) {
-            let part = player.snake_parts[i]
-            if (part.x === player.x && part.y === player.y) {
-                gameOver = true
-                break;
-            }
-        }
+
     }
     //onko pelaaja osunut seinään tasossa cage
     if (levelSelected == 2) {
@@ -293,15 +347,21 @@ function isGameOver() {
         } else if (player.x === wallUp[0] && player.y >= wallUp[1] && player.y <= wallUp[2]) {
             gameOver = true
         }
-        for (let i = 0; i < player.snake_parts.length; i++) {
-            let part = player.snake_parts[i]
-            if (part.x === player.x && part.y === player.y) {
-                gameOver = true
-                break;
-            }
+
+
+    }
+    for (let i = 0; i < player.snake_parts.length; i++) {
+        let part = player.snake_parts[i]
+        if (part.x === player.x && part.y === player.y) {
+            gameOver = true
+
         }
     }
-
+    for (let i = 0; i < enemies.length; i++) {
+        if (player.x === enemies[i].x && player.y === enemies[i].y) {
+            gameOver = true
+        }
+    }
 
     if (gameOver == true) {
         clearInterval(gameLoop)
@@ -406,9 +466,9 @@ function reload(event) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tästä alkaa pelaaja luokka, oli erillisessä tiedostossa mutta ei koulun palvelimella toiminut jostain syystä
+// Tästä alkaa pelaaja objekti, oli erillisessä tiedostossa mutta ei koulun palvelimella toiminut jostain syystä
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const playercolor = "green"
+const playercolor = "rgb(160, 104, 0)"
 const playerbordercolor = ""
 
 function Player(x, y) {
@@ -453,19 +513,33 @@ function Player(x, y) {
         //pelaajan väri
         gameboard_ctx.fillStyle = this.playercolor
         gameboard_ctx.fillRect(this.x, this.y, this.width, this.height)
-        gameboard_ctx.strokeRect(this.x, this.y, 20, 20)
+        gameboard_ctx.strokeRect(this.x, this.y, this.width, this.height)
     }
     this.addpart = function() {
         this.playerLength++
     }
 
-    this.drawPlayer = function() {
-
-        this.drawplayer()
-
-    }
     this.moveSnake = function() {
         this.x = this.x + this.velocityX
         this.y = this.y + this.velocityY
     }
+}
+//////////////////////
+// Vihollisen luonti
+//////////////////////
+function staticEnemy(x, y) {
+    this.x = x
+    this.y = y
+    this.height = 20
+    this.width = 20
+
+}
+
+function drawEnemy() {
+    for (let i = 0; i < enemies.length; i++) {
+        gameboard_ctx.fillStyle = "purple"
+        gameboard_ctx.fillRect(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height)
+        gameboard_ctx.strokeRect(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height)
+    }
+
 }

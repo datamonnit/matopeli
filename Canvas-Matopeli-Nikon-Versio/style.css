@@ -20,7 +20,7 @@ h1 {
   text-align: center;
   margin: 0px;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -5px -2px black;
 }
 ol {
   margin: 0;
@@ -51,31 +51,31 @@ ol {
   text-align: center;
   margin: 0px;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
 }
 #gameControls {
-  top: 80%;
-  left: 15%;
+  top: 65%;
+  left: 8%;
   text-align: center;
   display: block;
   position: absolute;
   color: yellow;
-
+  
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
 }
 
 #levelCounter {
   padding: 0;
   margin: 0;
   top: 0;
-  left: 27%;
+  left: 26%;
   display: block;
   position: absolute;
   text-align: center;
   color: yellow;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
 }
 #gameOver {
   display: none;
@@ -88,7 +88,7 @@ ol {
 
   color: yellow;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
 }
 .game-btn {
   padding: 10px;
@@ -98,7 +98,7 @@ ol {
   font-weight: bold;
   font-size: 2rem;
   color: yellow;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
   background-color: darkblue;
   border: 3px solid yellow;
   box-shadow: 3px 1px #ff0000, 3px 3px #ff0000;
@@ -112,11 +112,21 @@ ol {
   display: block;
   position: absolute;
   top: 30%;
-  left: 33%;
+  left: 31.5%;
   text-align: center;
 }
 #languageSelect {
   top: 33%;
   left: 110%;
   position: absolute;
+}
+#tutorial{
+  margin-left: 650px;
+  width: 300px;
+  top: 10%;
+  position: absolute;
+  color: yellow;
+  font-size: 2.5rem;
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+
 }
