@@ -7,7 +7,7 @@ body {
 }
 #canvasGame {
   position: absolute;
-
+  color: rgb(255, 81, 0);
   top: 250px;
   left: 50%;
   transform: translate(-50%, 0%);
@@ -51,18 +51,18 @@ ol {
   text-align: center;
   margin: 0px;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
 }
 #gameControls {
-  top: 65%;
+  top: 67%;
   left: 8%;
   text-align: center;
   display: block;
   position: absolute;
   color: yellow;
-  
+
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
 }
 
 #levelCounter {
@@ -75,7 +75,7 @@ ol {
   text-align: center;
   color: yellow;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
 }
 #gameOver {
   display: none;
@@ -88,7 +88,7 @@ ol {
 
   color: yellow;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
 }
 .game-btn {
   padding: 10px;
@@ -98,7 +98,7 @@ ol {
   font-weight: bold;
   font-size: 2rem;
   color: yellow;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
   background-color: darkblue;
   border: 3px solid yellow;
   box-shadow: 3px 1px #ff0000, 3px 3px #ff0000;
@@ -120,13 +120,12 @@ ol {
   left: 110%;
   position: absolute;
 }
-#tutorial{
+#tutorial {
   margin-left: 650px;
   width: 300px;
   top: 10%;
   position: absolute;
   color: yellow;
   font-size: 2.5rem;
-  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black; 
-
+  text-shadow: 3px 1px #ff0000, 3px 1px #ff0000, -3px 4px black, 3px 4px black;
 }

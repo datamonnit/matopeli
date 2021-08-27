@@ -1,6 +1,6 @@
 const gameboard_background = 'black'
 const gameboard_border = 'black'
-const gameboard_wall = 'rgba(251, 255, 0, 0.9)'
+var gameboard_wall = 'rgb(255, 81, 0)'
 const gameboard_wall_border = 'white'
 
 var gameboard;
@@ -14,8 +14,9 @@ var gamespeed = 10
 var overallscore = 0;
 var enemyCount = 0;
 var enemies = []
-///////////////////////////////////////////////
-//Tasojen pisteet
+var wallColorchange = 0
+    ///////////////////////////////////////////////
+    //Tasojen pisteet
 var level1Highscore = localStorage.getItem('savedHighScore1');
 var level2Highscore = localStorage.getItem('savedHighScore2');
 var level3Highscore = localStorage.getItem('savedHighScore3');
@@ -32,11 +33,8 @@ window.onload = function() {
     gameLoop = setInterval(step, 1000 / gamespeed)
         //luo pelaajan
     player = new Player(tilecount * 10, tilecount * 10)
-
-    //luodaan ensimmäisen omenan koordinaatit
-    appleX = Math.floor(Math.random() * tilecount) * 20
-    appleY = Math.floor(Math.random() * tilecount) * 20
-    console.log(appleX, appleY)
+        //luodaan ensimmäisen omenan koordinaatit
+    createAppleCoordinates()
 
 }
 
@@ -63,9 +61,7 @@ function levelCage() {
     document.getElementById('levelcount').innerHTML = 'Cage'
     gameboard_ctx.fillStyle = gameboard_wall
     gameboard_ctx.lineWidth = 3
-
-    //Seinien koordinaatit collisionia varten
-
+        //Seinien koordinaatit collisionia varten
     wallLeft = [80, 160, 440]
     wallRight = [500, 160, 440]
     wallUp = [100, 160, 420]
@@ -74,22 +70,15 @@ function levelCage() {
         //vasen
     gameboard_ctx.fillRect(80, 160, 20, 300),
         gameboard_ctx.strokeRect(80, 160, 20, 300)
-
-    //oikea
+        //oikea
     gameboard_ctx.fillRect(500, 160, 20, 300),
         gameboard_ctx.strokeRect(500, 160, 20, 300)
-
-    //ylä
+        //ylä
     gameboard_ctx.fillRect(160, 100, 280, 20),
         gameboard_ctx.strokeRect(160, 100, 280, 20)
-
-    //ala
+        //ala
     gameboard_ctx.fillRect(160, 500, 280, 20),
         gameboard_ctx.strokeRect(160, 500, 280, 20)
-
-
-
-
 }
 
 function levelVertical() {
@@ -129,15 +118,29 @@ function levelVertical() {
 
 
 function step() {
+
     directionchanged = false
     clearCanvas();
+    changeWallColor()
     player.moveSnake();
     isGameOver();
     checkUnitCollisions();
     drawApple();
     player.drawplayer();
     drawEnemy();
-    console.log(player.x, player.y)
+    level_Selected()
+
+}
+function changeWallColor(){
+    if (wallColorchange == 10) {
+        gameboard_wall = 'red'
+        wallColorchange = 0
+    } else if (wallColorchange == 2) {
+        gameboard_wall = 'rgb(221, 88, 0)'
+    }
+    wallColorchange++
+}
+function level_Selected(){
     switch (levelSelected) {
         case 1:
             levelClassic();
@@ -151,12 +154,13 @@ function step() {
         default:
             levelClassic();
     }
+
 }
 
 function drawApple() {
     x = appleX
     y = appleY
-    gameboard_ctx.fillStyle = 'lightgreen'
+    gameboard_ctx.fillStyle = 'rgb(0, 245, 33)'
     gameboard_ctx.strokeStyle = 'white'
     gameboard_ctx.lineWidth = 2
     gameboard_ctx.fillRect(x, y, applewidth, appleheight)
@@ -165,186 +169,128 @@ function drawApple() {
 }
 
 function checkUnitCollisions() {
-    //tarkistetaan kaikkien pelin objektien collision, erittäin huono tapa 
+    //tarkistetaan kaikkien pelin objektien collision, ei välttämättä paras tapa hoitaa tätä kaikkea täällä
     if (appleX === player.x && appleY === player.y) {
-        appleX = Math.floor(Math.random() * tilecount) * 20
-        appleY = Math.floor(Math.random() * tilecount) * 20
+        createAppleCoordinates()
         drawApple()
         player.addpart()
         overallscore++
         gamespeed = gamespeed + 0.25
         clearInterval(gameLoop)
         gameLoop = setInterval(step, 1000 / gamespeed)
-        console.log(gamespeed)
         document.getElementById('currentscore').innerHTML = overallscore
-            //luodaan vihollinen aina kun pelaaja on syönyt 5 omenaa ja tarkistetaan ettei vihollinen ole seinän, pelaajan tai omenan sisällä
+            //luodaan vihollinen aina kun pelaaja on syönyt X määrän omenoita ja tarkistetaan ettei vihollinen ole seinän, pelaajan tai omenan sisällä
+            //Viholliset
+            /////////////
         if (overallscore % 3 == 0) {
 
-            addEnemy = new staticEnemy(Math.floor(Math.random() * tilecount) * 20, Math.floor(Math.random() * tilecount) * 20)
+            addEnemy = new staticEnemy(createEnemyCoordinates()[0], createEnemyCoordinates()[1])
             while (true) {
 
                 if (addEnemy.x === player.x && addEnemy.y === player.y) {
-                    addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                    addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    addEnemy.x = createEnemyCoordinates()[0]
+                    addEnemy.y = createEnemyCoordinates()[1]
                 }
                 for (let i = 0; i < player.snake_parts.length; i++) {
                     if (addEnemy.x === player.snake_parts[i].x && addEnemy.y === player.snake_parts[i].y) {
-                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                        addEnemy.x = createEnemyCoordinates()[0]
+                        addEnemy.y = createEnemyCoordinates()[1]
                     }
                 }
                 if (levelSelected == 2) {
-                    if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2]) {
-                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                    } else if (addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2]) {
-                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                    } else if (addEnemy.y === wallDown[0] && addEnemy.x >= wallDown[1] && addEnemy.x <= wallDown[2]) {
-                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                    } else if (addEnemy.y === wallUp[0] && addEnemy.x >= wallUp[1] && addEnemy.x <= wallUp[2]) {
-                        addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                        addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2] ||
+                        addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2] ||
+                        addEnemy.y === wallDown[0] && addEnemy.x >= wallDown[1] && addEnemy.x <= wallDown[2] ||
+                        addEnemy.y === wallUp[0] && addEnemy.x >= wallUp[1] && addEnemy.x <= wallUp[2]) {
+                        addEnemy.x = createEnemyCoordinates()[0]
+                        addEnemy.y = createEnemyCoordinates()[1]
                     }
                     if (levelSelected == 3) {
-                        if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2]) {
-                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                            
-                        } else if (addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2]) {
-                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                        } else if (addEnemy.x === wallDown[0] && addEnemy.y >= wallDown[1] && addEnemy.y <= wallDown[2]) {
-                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
-                        } else if (addEnemy.x === wallUp[0] && addEnemy.y >= wallUp[1] && addEnemy.y <= wallUp[2]) {
-                            addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                            addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                        if (addEnemy.x === wallLeft[0] && addEnemy.y >= wallLeft[1] && addEnemy.y <= wallLeft[2] ||
+                            addEnemy.x === wallRight[0] && addEnemy.y >= wallRight[1] && addEnemy.y <= wallRight[2] ||
+                            addEnemy.x === wallDown[0] && addEnemy.y >= wallDown[1] && addEnemy.y <= wallDown[2] ||
+                            addEnemy.x === wallUp[0] && addEnemy.y >= wallUp[1] && addEnemy.y <= wallUp[2]) {
+                            addEnemy.x = createEnemyCoordinates()[0]
+                            addEnemy.y = createEnemyCoordinates()[1]
                         }
                     }
                 } else if (addEnemy.x === appleX && addEnemy.y === appleY) {
-                    addEnemy.x = Math.floor(Math.random() * tilecount) * 20
-                    addEnemy.y = Math.floor(Math.random() * tilecount) * 20
+                    addEnemy.x = createEnemyCoordinates()[0]
+                    addEnemy.y = createEnemyCoordinates()[1]
                 }
                 enemies.push(addEnemy)
                 break;
             }
-
         }
+        ////////////////////////
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //Omenat
+    //tarkistetaan ettei uusi omena ole seinän sisällä, jos on niin luodaan uusi omena
     if (levelSelected == 2) {
-        //tarkistetaan ettei uusi omena ole seinän sisällä, jos on niin luodaan uusi omena
-        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleY === wallDown[0] && appleX >= wallDown[1] && appleX <= wallDown[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleY === wallUp[0] && appleX >= wallUp[1] && appleX <= wallUp[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
+
+        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2] ||
+            appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2] ||
+            appleY === wallDown[0] && appleX >= wallDown[1] && appleX <= wallDown[2] ||
+            appleY === wallUp[0] && appleX >= wallUp[1] && appleX <= wallUp[2]) {
+            createAppleCoordinates()
             drawApple()
         }
     }
+    //tarkistetaan ettei uusi omena ole käärmeen tai seinän sisällä, jos on niin luodaan uusi omena
     if (levelSelected == 3) {
-        //tarkistetaan ettei uusi omena ole käärmeen tai seinän sisällä, jos on niin luodaan uusi omena
-        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleX === wallDown[0] && appleY >= wallDown[1] && appleY <= wallDown[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
-        } else if (appleX === wallUp[0] && appleY >= wallUp[1] && appleY <= wallUp[2]) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
-            drawApple()
+        if (appleX === wallLeft[0] && appleY >= wallLeft[1] && appleY <= wallLeft[2] ||
+            appleX === wallRight[0] && appleY >= wallRight[1] && appleY <= wallRight[2] ||
+            appleX === wallDown[0] && appleY >= wallDown[1] && appleY <= wallDown[2] ||
+            appleX === wallUp[0] && appleY >= wallUp[1] && appleY <= wallUp[2]) {
+            createAppleCoordinates()
+
         }
     }
     //tarkistetaan ettei omena ole pelaajan hännän sisällä
     for (let i = 0; i < player.snake_parts.length; i++) {
         if (appleX == player.snake_parts[i].x && appleY == player.snake_parts[i].y) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
+            createAppleCoordinates()
         }
     }
     //tarkistetaan ettei omena ole vihollisen sisällä
     for (let i = 0; i < enemies.length; i++) {
         if (appleX === enemies[i].x && appleY === enemies[i].y) {
-            appleX = Math.floor(Math.random() * tilecount) * 20
-            appleY = Math.floor(Math.random() * tilecount) * 20
+            createAppleCoordinates()
         }
     }
 }
 
 function isGameOver() {
-
     if (player.velocityX === 0 && player.velocityY === 0) {
         return false;
     }
+    //onko pelaaja osunut canvaksen reunaan
 
-    //onko pelaaja osunut seinään tasossa classic
-    if (levelSelected == 1) {
-        if (player.x < 0) {
-            gameOver = true
-        } else if (player.x === gameboard.width) {
-            gameOver = true
-        } else if (player.y < 0) {
-            gameOver = true
-        } else if (player.y === gameboard.height) {
-            gameOver = true
-        }
-
+    if (player.x < 0 ||
+        player.x === gameboard.width ||
+        player.y < 0 ||
+        player.y === gameboard.height) {
+        gameOver = true
     }
-    //onko pelaaja osunut seinään tasossa cage
+
+
+    //onko pelaaja osunut esteeseen tasossa cage
     if (levelSelected == 2) {
-        if (player.x < 0) {
-            gameOver = true
-        } else if (player.x === gameboard.width) {
-            gameOver = true
-        } else if (player.y < 0) {
-            gameOver = true
-        } else if (player.y === gameboard.height) {
-            gameOver = true
-        } else if (player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2]) {
-            gameOver = true
-        } else if (player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2]) {
-            gameOver = true
-        } else if (player.y === wallDown[0] && player.x >= wallDown[1] && player.x <= wallDown[2]) {
-            gameOver = true
-        } else if (player.y === wallUp[0] && player.x >= wallUp[1] && player.x <= wallUp[2]) {
+        if (player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2] ||
+            player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2] ||
+            player.y === wallDown[0] && player.x >= wallDown[1] && player.x <= wallDown[2] ||
+            player.y === wallUp[0] && player.x >= wallUp[1] && player.x <= wallUp[2]) {
             gameOver = true
         }
     }
-    //onko pelaaja osunut seinään tasossa vertical
+    //onko pelaaja osunut esteeseen tasossa vertical
     if (levelSelected == 3) {
-        if (player.x < 0) {
-            gameOver = true
-        } else if (player.x === gameboard.width) {
-            gameOver = true
-        } else if (player.y < 0) {
-            gameOver = true
-        } else if (player.y === gameboard.height) {
-            gameOver = true
-        } else if (player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2]) {
-            gameOver = true
-        } else if (player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2]) {
-            gameOver = true
-        } else if (player.x === wallDown[0] && player.y >= wallDown[1] && player.y <= wallDown[2]) {
-            gameOver = true
-        } else if (player.x === wallUp[0] && player.y >= wallUp[1] && player.y <= wallUp[2]) {
+        if (
+            player.x === wallLeft[0] && player.y >= wallLeft[1] && player.y <= wallLeft[2] ||
+            player.x === wallRight[0] && player.y >= wallRight[1] && player.y <= wallRight[2] ||
+            player.x === wallDown[0] && player.y >= wallDown[1] && player.y <= wallDown[2] ||
+            player.x === wallUp[0] && player.y >= wallUp[1] && player.y <= wallUp[2]) {
             gameOver = true
         }
 
@@ -404,15 +350,24 @@ function isGameOver() {
 }
 
 
+function createAppleCoordinates() {
+    appleX = Math.floor(Math.random() * tilecount) * 20
+    appleY = Math.floor(Math.random() * tilecount) * 20
+    return [appleX, appleY]
+}
+
+function createEnemyCoordinates() {
+    enemyX = Math.floor(Math.random() * tilecount) * 20
+    enemyY = Math.floor(Math.random() * tilecount) * 20
+    return [enemyX, enemyY]
+}
 
 
 function change_direction(event) {
-    console.log(event.which)
-        //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
+
+    //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
     if (directionchanged == false) {
         // estää pelaajaa peruuttamasta
-
-
         if (event.which == 37 || event.which == 65) {
             if (player.velocityX == 20)
                 return
@@ -468,7 +423,7 @@ function reload(event) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Tästä alkaa pelaaja objekti, oli erillisessä tiedostossa mutta ei koulun palvelimella toiminut jostain syystä
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const playercolor = "rgb(160, 104, 0)"
+const playercolor = "red"
 const playerbordercolor = ""
 
 function Player(x, y) {
@@ -486,15 +441,12 @@ function Player(x, y) {
     this.playercolor = playercolor
     this.playerbordercolor = playerbordercolor
     this.snake_parts = []
-    this.playerLength = 3;
+    this.playerLength = 2;
     this.velocityX = 0;
     this.velocityY = 0;
     this.score = 0;
 
-
-
     this.drawplayer = function() {
-
         gameboard_ctx.fillStyle = 'blue'
         gameboard_ctx.strokeStyle = 'white'
         gameboard_ctx.strokeWidth = 1
@@ -502,7 +454,6 @@ function Player(x, y) {
             let part = this.snake_parts[i]
             gameboard_ctx.fillRect(part.x, part.y, 20, 20)
             gameboard_ctx.strokeRect(part.x, part.y, 20, 20)
-
         }
         //lisää uuden osan
         this.snake_parts.push(new PlayerParts(this.x, this.y))
