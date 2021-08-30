@@ -13,23 +13,21 @@
 
 <body>
 
-    <br> <br>
-    <h1 class="header">Snake</h1>
-    <h3 id="score">Score: <span id="currentscore">0</span> <br>Level Highscore: <span id="highScore">0</span> </h3>
+    <div id="headerDiv">
+        <h3 id="score">Score: <span id="currentscore">0</span> <br>Level Highscore: <span id="highScore">0</span> </h3>
+    </div>
     <div id="canvasGame">
-      
+
         <canvas id="game_canvas" width="600" height="600"></canvas>
-        <div id="tutorial">
-            <h5>Green = Apple <br> Purple = Enemy</h5>
-        </div>
+
         <div id="gameControls">
-            <h5 class="game-controls">Controls: W, A, S, D or Arrowkeys. <br> <br> Start game by pressing any movement key.</h5>
+            <h5 class="game-controls">Controls: W, A, S, D or Arrowkeys. <br> Start game by pressing any movement key. </h5>
         </div>
         <div id="levelCounter">
             <h5 class="level">Selected Level: <span id="levelcount"></span></h5>
         </div>
         <div id="gameOver">
-            Game Over! <br> Press Spacebar to start again
+            Game Over! <br> Press Spacebar or tap the game screen to start again
         </div>
         <div id="levelSelect">
             <ol> <button class="game-btn" onclick="levelClassic(), levelSelected = 1">Level: Classic</button>
@@ -39,13 +37,28 @@
                 <button class="game-btn" onclick="levelVertical(), levelSelected = 3">Level: Vertical</button></ol>
 
         </div>
-
+        <div id="touchControlUp" class="touchcontrols">
+            <p>UP</p>
+        </div>
+        <div id="touchControlDown" class="touchcontrols">
+            <p>DOWN</p>
+        </div>
+        <div id="touchControlLeft" class="touchcontrols">
+            <p>LEFT</p>
+        </div>
+        <div id="touchControlRight" class="touchcontrols">
+            <p>RIGHT</p>
+        </div>
+        <div id="tutorial">
+            <h5>Green = Apple <br> Purple = Enemy</h5>
+        </div>
+        <div id="footer2">
+            <footer>Creator : Niko Eklöf &copy; 2021</footer>
+        </div>
 
     </div>
 
-    <div id="footer2">
-        <footer>Creator : Niko Eklöf &copy; 2021</footer>
-    </div>
+   
 </body>
 
 </html>

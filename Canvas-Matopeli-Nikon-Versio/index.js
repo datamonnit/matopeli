@@ -15,8 +15,10 @@ var overallscore = 0;
 var enemyCount = 0;
 var enemies = []
 var wallColorchange = 0
-    ///////////////////////////////////////////////
-    //Tasojen pisteet
+
+
+///////////////////////////////////////////////
+//Tasojen pisteet
 var level1Highscore = localStorage.getItem('savedHighScore1');
 var level2Highscore = localStorage.getItem('savedHighScore2');
 var level3Highscore = localStorage.getItem('savedHighScore3');
@@ -25,6 +27,29 @@ var levelSelected = 1;
 var directionchanged;
 var gameOver = false
 document.body.addEventListener('keydown', change_direction);
+const touchUp = document.getElementById('touchControlUp')
+const touchDown = document.getElementById('touchControlDown')
+const touchLeft = document.getElementById('touchControlLeft')
+const touchRight = document.getElementById('touchControlRight')
+    //Event listenerit napeille kosketuslaitteita varten
+touchUp.addEventListener('touchstart', function(event) {
+    event.preventDefault()
+    touchControls(1)
+})
+touchDown.addEventListener('touchstart', function(event) {
+    event.preventDefault()
+    touchControls(2)
+})
+touchLeft.addEventListener('touchstart', function(event) {
+    event.preventDefault()
+    touchControls(3)
+})
+touchRight.addEventListener('touchstart', function(event) {
+    event.preventDefault()
+    touchControls(4)
+})
+
+
 
 window.onload = function() {
     gameboard = document.getElementById('game_canvas')
@@ -131,7 +156,8 @@ function step() {
     level_Selected()
 
 }
-function changeWallColor(){
+
+function changeWallColor() {
     if (wallColorchange == 10) {
         gameboard_wall = 'red'
         wallColorchange = 0
@@ -140,7 +166,8 @@ function changeWallColor(){
     }
     wallColorchange++
 }
-function level_Selected(){
+
+function level_Selected() {
     switch (levelSelected) {
         case 1:
             levelClassic();
@@ -313,6 +340,9 @@ function isGameOver() {
         clearInterval(gameLoop)
         document.getElementById('gameOver').style.display = "block";
         document.body.addEventListener('keydown', reload);
+        document.getElementById('game_canvas').addEventListener('touchstart', function(){
+            location.reload()
+        })
         switch (levelSelected) {
             case 1:
                 if (overallscore >= level1Highscore) {
@@ -364,10 +394,10 @@ function createEnemyCoordinates() {
 
 
 function change_direction(event) {
-
-    //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
+        //estetään pelaajaa antamasta useampaa inputtia yhden gametickin aikana
     if (directionchanged == false) {
         // estää pelaajaa peruuttamasta
+        //vasen
         if (event.which == 37 || event.which == 65) {
             if (player.velocityX == 20)
                 return
@@ -375,7 +405,9 @@ function change_direction(event) {
             player.velocityY = 0;
             directionchanged = true
 
+
         }
+        //oikea
         if (event.which == 39 || event.which == 68) {
             if (player.velocityX == -20)
                 return
@@ -383,7 +415,9 @@ function change_direction(event) {
             player.velocityY = 0;
             directionchanged = true
 
+
         }
+        //ylös
         if (event.which == 38 || event.which == 87) {
             if (player.velocityY == 20)
                 return
@@ -392,7 +426,7 @@ function change_direction(event) {
             directionchanged = true
 
         }
-
+        //alas
         if (event.which == 40 || event.which == 83) {
             if (player.velocityY == -20)
                 return
@@ -408,6 +442,54 @@ function change_direction(event) {
         document.getElementById('levelCounter').style.display = "none"
         document.getElementById('gameControls').style.display = "none"
         document.getElementById('levelSelect').style.display = "none"
+        document.getElementById('tutorial').style.display = "none"
+
+    }
+}
+
+function touchControls(direction) {
+    if (directionchanged == false) {
+        // estää pelaajaa peruuttamasta
+        //vasen
+        if (direction === 3) {
+            if (player.velocityX == 20)
+                return
+            player.velocityX = -20;
+            player.velocityY = 0;
+            directionchanged = true
+        }
+        //oikea
+        if (direction === 4) {
+            if (player.velocityX == -20)
+                return
+            player.velocityX = 20;
+            player.velocityY = 0;
+            directionchanged = true
+        }
+        //ylös
+        if (direction === 1) {
+            if (player.velocityY == 20)
+                return
+            player.velocityX = 0;
+            player.velocityY = -20;
+            directionchanged = true
+        }
+        //alas
+        if (direction === 2) {
+            if (player.velocityY == -20)
+                return
+            player.velocityX = 0;
+            player.velocityY = 20;
+            directionchanged = true
+        }
+    } else {
+        return
+    }
+    if (player.velocityX != 0 || player.velocityY != 0) {
+        document.getElementById('levelCounter').style.display = "none"
+        document.getElementById('gameControls').style.display = "none"
+        document.getElementById('levelSelect').style.display = "none"
+        document.getElementById('tutorial').style.display = "none"
 
     }
 }
